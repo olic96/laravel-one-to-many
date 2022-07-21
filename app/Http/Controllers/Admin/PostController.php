@@ -34,7 +34,7 @@ class PostController extends Controller
         $categories = Category::all();
 
         return view('admin.posts.create', compact('categories'));
-    }
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +48,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string|max:65535',
-            'published' => 'sometimes|accepted'
+            'published' => 'sometimes|accepted',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
         // prendo i dati dalla request e creo il post
         $data = $request->all();
@@ -81,8 +82,10 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Post $post)
-    {
-        return view('admin.posts.edit', compact('post'));
+    {   
+        $categories = Category::all(); 
+
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -98,7 +101,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string|max:65535',
-            'published' => 'sometimes|accepted'
+            'published' => 'sometimes|accepted',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
         // aggiornamento
         $data = $request->all();
